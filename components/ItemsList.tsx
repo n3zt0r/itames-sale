@@ -1,5 +1,6 @@
-import { colorPrimary } from "@/constants/Colors";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { surface } from "@/constants/Colors";
+import { ScrollView, StyleSheet, View } from "react-native";
+
 import Item from "./Item";
 
 export default function ItemsList() {
@@ -22,11 +23,11 @@ export default function ItemsList() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colorPrimary,
+    backgroundColor: surface,
     // borderRadius: 30,
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
-    paddingHorizontal: 30,
+    paddingHorizontal: 24,
     paddingTop: 35,
     paddingBottom: 20,
   },

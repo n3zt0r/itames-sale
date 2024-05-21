@@ -1,12 +1,13 @@
+import { StyleSheet, Text, View } from "react-native";
+
 import {
   colorPrimary,
   primary,
   primaryVariant,
   secondary,
 } from "@/constants/Colors";
-import { StyleSheet, Text, View } from "react-native";
 
-export function Header() {
+export default function Header() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Items for sale</Text>
