@@ -4,7 +4,7 @@ import { StatusBar } from "expo-status-bar";
 import Header from "@/components/Header";
 import ItemsList from "@/components/ItemsList";
 import { primary, primaryVariant } from "@/constants/Colors";
-import ActionButtons from "@/components/ActionButtons";
+import ItemModal from "@/components/ItemModal";
 
 export default function Index() {
   return (
@@ -14,7 +14,7 @@ export default function Index() {
       <Header />
       <ItemsList />
 
-      <ActionButtons />
+      <ItemModal />
     </SafeAreaView>
   );
 }

@@ -6,6 +6,7 @@ import {
   colorSecondary,
   error,
   secondaryVariant,
+  surface,
 } from "@/constants/Colors";
 
 export default function Item() {
@@ -43,9 +44,6 @@ export default function Item() {
 }
 
 const styles = StyleSheet.create({
-  row: {
-    flexDirection: "row",
-  },
   container: {
     position: "relative",
     flex: 1,
@@ -68,5 +66,8 @@ const styles = StyleSheet.create({
     color: colorSecondary,
     fontSize: 16,
     fontWeight: "500",
+  },
+  row: {
+    flexDirection: "row",
   },
 });
