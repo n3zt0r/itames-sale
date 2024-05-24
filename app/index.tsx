@@ -3,8 +3,8 @@ import { StatusBar } from "expo-status-bar";
 
 import Header from "@/components/Header";
 import ItemsList from "@/components/ItemsList";
-import { primary, primaryVariant } from "@/constants/Colors";
 import ItemModal from "@/components/ItemModal";
+import { primary, primaryVariant } from "@/constants/Colors";
 
 export default function Index() {
   return (

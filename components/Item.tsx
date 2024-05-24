@@ -6,11 +6,14 @@ import {
   colorSecondary,
   error,
   secondaryVariant,
-  surface,
 } from "@/constants/Colors";
+import { ItemType } from "@/types";
+import { formatCurrency } from "@/helpers";
+import { useItemsStore } from "@/app/store";
 
-export default function Item() {
+export default function Item({ id, name, price }: ItemType) {
   const [isChecked, setChecked] = useState(false);
+  const setItems = useItemsStore((state) => state.setItems);
 
   return (
     <Pressable
@@ -30,12 +33,12 @@ export default function Item() {
 
         <View style={styles.textArea}>
           <Text style={[styles.text, isChecked && { color: colorPrimary }]}>
-            Final-Fantasy-VII-Remake-(Deluxe-Edition)
+            {name}
           </Text>
           <Text
             style={[styles.text, { color: isChecked ? colorPrimary : error }]}
           >
-            $200.00
+            {formatCurrency(price!)}
           </Text>
         </View>
       </View>

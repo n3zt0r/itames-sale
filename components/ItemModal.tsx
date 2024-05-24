@@ -1,12 +1,9 @@
 import {
   background,
   colorPrimary,
-  primary,
   primaryVariant,
   surface,
 } from "@/constants/Colors";
-import { FontAwesome } from "@expo/vector-icons";
-import { useState } from "react";
 import {
   Pressable,
   StyleSheet,
@@ -17,47 +14,31 @@ import {
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { useItemsStore } from "@/app/store";
+import Error from "./Error";
+import Menu from "./Menu";
 
 export default function ItemModal() {
-  const items = useItemsStore((state) => state.items);
-  const setItems = useItemsStore((state) => state.setItems);
   const isShowModal = useItemsStore((state) => state.isShowModal);
   const setIsShowModal = useItemsStore((state) => state.setIsShowModal);
+  const isError = useItemsStore((state) => state.isError);
+  const { name, price } = useItemsStore((state) => state.updateItem);
+  const setUpdateItem = useItemsStore((state) => state.setUpdateItem);
 
-  const [name, setName] = useState("");
-  const [price, setPrice] = useState("");
-
-  const handleIsShowModal = () => {
+  const handleClose = () => {
+    // Cierra el modal
     setIsShowModal();
-  };
-
-  const handleCreateItem = (name: string, price: string) => {
-    if (isShowModal) {
-      if (name && price) {
-        const item = { name, price: Number(price) };
-        setItems(item);
-      } else {
-        console.log("Mal");
-        return;
-      }
-    }
-
-    handleIsShowModal();
   };
 
   return (
     <>
       {isShowModal && (
         <>
-          <Pressable style={styles.curtain} onPress={handleIsShowModal} />
+          <Pressable style={styles.curtain} onPress={handleClose} />
 
           <View style={[styles.container, styles.borderRadius]}>
-            <Text style={styles.title}>Item Create</Text>
+            <Text style={styles.title}>New Item</Text>
 
-            <TouchableOpacity
-              style={styles.closeButton}
-              onPress={handleIsShowModal}
-            >
+            <TouchableOpacity style={styles.closeButton} onPress={handleClose}>
               <AntDesign name="closecircle" size={30} color={colorPrimary} />
             </TouchableOpacity>
 
@@ -67,29 +48,26 @@ export default function ItemModal() {
                 style={styles.inputText}
                 placeholder="Name of item"
                 value={name}
-                onChangeText={(text) => setName(text)}
+                onChangeText={(text) => setUpdateItem({ name: text })}
               />
 
-              <Text style={styles.text}>Prize:</Text>
+              <Text style={styles.text}>Price:</Text>
               <TextInput
                 style={styles.inputText}
                 keyboardType="number-pad"
                 placeholder="Price of item"
-                value={price}
-                onChangeText={(text) => setPrice(text)}
+                value={price?.toString()}
+                onChangeText={(text) => setUpdateItem({ price: Number(text) })}
               />
+
+              {isError && <Error>All fields are required</Error>}
             </View>
           </View>
         </>
       )}
 
       <View style={styles.buttonArea}>
-        <TouchableOpacity
-          onPress={() => handleCreateItem(name, price)}
-          style={[styles.button, styles.borderRadius]}
-        >
-          <FontAwesome name="plus" size={30} color={colorPrimary} />
-        </TouchableOpacity>
+        <Menu />
       </View>
     </>
   );
@@ -142,16 +120,11 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   buttonArea: {
+    flexDirection: "row",
     width: "100%",
     position: "absolute",
-    alignItems: "center",
+    justifyContent: "space-around",
     bottom: 0,
-  },
-  button: {
-    backgroundColor: primary,
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 14,
   },
   borderRadius: {
     borderTopLeftRadius: 30,
