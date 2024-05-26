@@ -21,8 +21,8 @@ export default function ItemModal() {
   const isShowModal = useItemsStore((state) => state.isShowModal);
   const setIsShowModal = useItemsStore((state) => state.setIsShowModal);
   const isError = useItemsStore((state) => state.isError);
-  const { name, price } = useItemsStore((state) => state.updateItem);
-  const setUpdateItem = useItemsStore((state) => state.setUpdateItem);
+  const { name, price, isEdited } = useItemsStore((state) => state.cacheItem);
+  const setCacheItem = useItemsStore((state) => state.setCacheItem);
 
   const handleClose = () => {
     // Cierra el modal
@@ -36,7 +36,9 @@ export default function ItemModal() {
           <Pressable style={styles.curtain} onPress={handleClose} />
 
           <View style={[styles.container, styles.borderRadius]}>
-            <Text style={styles.title}>New Item</Text>
+            <Text style={styles.title}>
+              {isEdited ? "Edit Item" : "New Item"}{" "}
+            </Text>
 
             <TouchableOpacity style={styles.closeButton} onPress={handleClose}>
               <AntDesign name="closecircle" size={30} color={colorPrimary} />
@@ -48,7 +50,7 @@ export default function ItemModal() {
                 style={styles.inputText}
                 placeholder="Name of item"
                 value={name}
-                onChangeText={(text) => setUpdateItem({ name: text })}
+                onChangeText={(text) => setCacheItem({ name: text })}
               />
 
               <Text style={styles.text}>Price:</Text>
@@ -57,7 +59,7 @@ export default function ItemModal() {
                 keyboardType="number-pad"
                 placeholder="Price of item"
                 value={price?.toString()}
-                onChangeText={(text) => setUpdateItem({ price: Number(text) })}
+                onChangeText={(text) => setCacheItem({ price: Number(text) })}
               />
 
               {isError && <Error>All fields are required</Error>}
@@ -111,10 +113,12 @@ const styles = StyleSheet.create({
     right: 12,
   },
   text: {
+    marginVertical: 10,
     fontSize: 20,
     fontWeight: "500",
   },
   inputText: {
+    marginBottom: 10,
     backgroundColor: surface,
     padding: 16,
     borderRadius: 10,

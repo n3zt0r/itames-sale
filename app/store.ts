@@ -7,8 +7,10 @@ import { initialItem } from "@/constants/initialsConst";
 type ItemsStoreTypes = {
   items: ItemType[];
   setItems: (data: ItemType) => void;
-  updateItem: ItemType;
-  setUpdateItem: (data: ItemType) => void;
+  setUpdateItems: (data: ItemType) => void;
+  deleteItem: (id: ItemType["id"]) => void;
+  cacheItem: ItemType;
+  setCacheItem: (data: ItemType) => void;
   isShowModal: boolean;
   setIsShowModal: () => void;
   isError: boolean;
@@ -16,36 +18,38 @@ type ItemsStoreTypes = {
 };
 
 const createItem = (item: ItemType): ItemType => {
-  return { ...item, isChecked: false, isSoled: false, id: uuidv4() };
+  return { ...item, id: uuidv4() };
 };
 
-export const useItemsStore = create<ItemsStoreTypes>((set) => ({
+export const useItemsStore = create<ItemsStoreTypes>((set, get) => ({
   items: [],
   setItems: (data) => {
-    const item = data.id ? data : createItem(data);
-    set((state) => ({
-      items: [...state.items, item],
-    }));
+    const item = createItem(data);
+    set((state) => ({ items: [...state.items, item] }));
+  },
+  setUpdateItems: (data) => {
+    const newItems = get().items.map((item) =>
+      item.id === data.id ? data : item
+    );
+    set(() => ({ items: newItems }));
+  },
+  deleteItem: (id) => {
+    const newItems = get().items.filter((item) => item.id !== id);
+    set(() => ({ items: newItems }));
   },
 
-  updateItem: initialItem,
-  setUpdateItem: (data) => {
-    set((state) => ({
-      updateItem: { ...state.updateItem, ...data },
-    }));
+  cacheItem: initialItem,
+  setCacheItem: (data) => {
+    set((state) => ({ cacheItem: { ...state.cacheItem, ...data } }));
   },
 
   isShowModal: false,
   setIsShowModal: () => {
-    set((state) => ({
-      isShowModal: !state.isShowModal,
-    }));
+    set((state) => ({ isShowModal: !state.isShowModal }));
   },
 
   isError: false,
   setIsError: (data) => {
-    set(() => ({
-      isError: data,
-    }));
+    set(() => ({ isError: data }));
   },
 }));

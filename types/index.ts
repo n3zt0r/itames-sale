@@ -4,4 +4,5 @@ export type ItemType = {
   price?: number;
   isChecked?: boolean;
   isSoled?: boolean;
+  isEdited?: boolean;
 };
