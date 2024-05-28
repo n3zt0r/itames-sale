@@ -6,8 +6,29 @@ import {
   primaryVariant,
   secondary,
 } from "@/constants/Colors";
+import { useItemsStore } from "@/app/store";
+import { formatCurrency } from "@/helpers";
 
 export default function Header() {
+  const items = useItemsStore((state) => state.items);
+
+  const handleAmountItems = (boolean: boolean) => {
+    const money = items.reduce(
+      (sum, product) =>
+        product.isSold === boolean ? sum + product.price! : sum,
+      0
+    );
+    const amount = items.reduce(
+      (sum, product) => (product.isSold === boolean ? sum + 1 : sum),
+      0
+    );
+
+    return { money, amount };
+  };
+
+  const saleItems = handleAmountItems(false);
+  const soldItems = handleAmountItems(true);
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Items for sale</Text>
@@ -15,17 +36,21 @@ export default function Header() {
         <View style={styles.itemsInfoContent}>
           <Text style={[styles.text, styles.subTitleText]}>For sale:</Text>
           <Text style={[styles.text, styles.amountMoney, { color: "#f44336" }]}>
-            -$2,000.00
+            {formatCurrency(saleItems.money)}
           </Text>
-          <Text style={styles.text}>20 Items</Text>
+          <Text style={styles.text}>
+            {saleItems.amount} {saleItems.amount < 2 ? "Item" : "Items"}
+          </Text>
         </View>
         <View style={styles.separator} />
         <View style={styles.itemsInfoContent}>
           <Text style={[styles.text, styles.subTitleText]}>Sold:</Text>
           <Text style={[styles.text, styles.amountMoney, { color: secondary }]}>
-            +$1,000.00
+            {formatCurrency(soldItems.money)}
           </Text>
-          <Text style={styles.text}>10 Items</Text>
+          <Text style={styles.text}>
+            {soldItems.amount} {soldItems.amount < 2 ? "Item" : "Items"}
+          </Text>
         </View>
       </View>
     </View>

@@ -3,6 +3,7 @@ import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { useItemsStore } from "@/app/store";
 import Item from "./Item";
 import { background, colorSecondary, primary } from "@/constants/Colors";
+import Filter from "./Filter";
 
 export default function ItemsList() {
   const items = useItemsStore((state) => state.items);
@@ -11,7 +12,12 @@ export default function ItemsList() {
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.content}>
         {items.length ? (
-          items.map((product) => <Item key={product.id} {...product} />)
+          <>
+            <Filter />
+            {items.map((product) => (
+              <Item key={product.id} {...product} />
+            ))}
+          </>
         ) : (
           <Text style={styles.text}>
             Start adding items to the list with{" "}

@@ -5,6 +5,6 @@ export const initialItem: ItemType = {
   name: "",
   price: 0,
   isChecked: false,
-  isSoled: false,
+  isSold: false,
   isEdited: false,
 };

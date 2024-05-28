@@ -3,6 +3,6 @@ export type ItemType = {
   name?: string;
   price?: number;
   isChecked?: boolean;
-  isSoled?: boolean;
+  isSold?: boolean;
   isEdited?: boolean;
 };

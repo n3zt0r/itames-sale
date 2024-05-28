@@ -18,27 +18,39 @@ import { formatCurrency } from "@/helpers";
 import { FontAwesome } from "@expo/vector-icons";
 
 export default function Item(product: ItemType) {
+  // --- Global State variables ---
+  const items = useItemsStore((state) => state.items);
   const deleteItem = useItemsStore((state) => state.deleteItem);
   const setIsShowModal = useItemsStore((state) => state.setIsShowModal);
-  const setUpdateItems = useItemsStore((state) => state.setUpdateItems);
+  const updateItems = useItemsStore((state) => state.updateItems);
   const setCacheItem = useItemsStore((state) => state.setCacheItem);
-  const { id, name, price, isChecked, isSoled, isEdited } = product;
+  const { id, name, price, isChecked, isSold } = product;
+
+  const isSomeItemChecked = items.some((product) => product.isChecked === true);
 
   const handleChecked = (isChecked: boolean) => {
-    setUpdateItems({ ...product, isChecked });
+    // --- Actualiza el parametro "isChecked" del producto ---
+    updateItems({ ...product, isChecked });
   };
 
   const handleEdit = (product: ItemType) => {
+    // --- Actualiza el parametro "isEdited" del producto ---
     setCacheItem({ ...product, isEdited: true });
+    // --- Abre el modal ---
     setIsShowModal();
+  };
+
+  const handleSell = () => {
+    // --- Actualiza el parametro "isSold" del producto ---
+    updateItems({ ...product, isSold: !isSold });
   };
 
   return (
     <Pressable
       style={[
         styles.container,
-        isChecked && {
-          backgroundColor: secondaryVariant,
+        (isChecked || isSold) && {
+          backgroundColor: isSold ? gray : secondaryVariant,
           borderBottomWidth: 0,
         },
       ]}
@@ -63,15 +75,21 @@ export default function Item(product: ItemType) {
         </View>
 
         <View style={styles.buttonArea}>
-          <TouchableOpacity onPress={() => handleEdit(product)}>
+          <TouchableOpacity
+            disabled={isSomeItemChecked}
+            onPress={() => handleEdit(product)}
+          >
             <FontAwesome
+              style={
+                isSomeItemChecked ? { display: "none" } : { display: "flex" }
+              }
               name="edit"
               size={24}
-              color={isChecked ? colorPrimary : colorSecondary}
+              color={colorSecondary}
             />
           </TouchableOpacity>
 
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => handleSell()}>
             <FontAwesome
               name="dollar"
               size={24}
@@ -92,6 +110,7 @@ export default function Item(product: ItemType) {
   );
 }
 
+// -- Estilos del componente --
 const styles = StyleSheet.create({
   container: {
     padding: 20,
@@ -105,7 +124,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
   },
   checkbox: {
-    borderRadius: 10,
+    borderRadius: 5,
   },
   textArea: {
     flexShrink: 1,

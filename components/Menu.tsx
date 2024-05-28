@@ -1,5 +1,5 @@
 import { useItemsStore } from "@/app/store";
-import { colorPrimary, primary } from "@/constants/Colors";
+import { colorPrimary, error, primary } from "@/constants/Colors";
 import { initialItem } from "@/constants/initialsConst";
 import { ItemType } from "@/types";
 import { FontAwesome } from "@expo/vector-icons";
@@ -9,22 +9,33 @@ export default function Menu() {
   // --- Global State variables ---
   const items = useItemsStore((state) => state.items);
   const setItems = useItemsStore((state) => state.setItems);
-  const setUpdateItems = useItemsStore((state) => state.setUpdateItems);
+  const updateItems = useItemsStore((state) => state.updateItems);
+  const sellItems = useItemsStore((state) => state.sellItems);
+  const deleteItems = useItemsStore((state) => state.deleteItems);
+  const unCheckAllItems = useItemsStore((state) => state.unCheckAllItems);
   const isShowModal = useItemsStore((state) => state.isShowModal);
   const setIsShowModal = useItemsStore((state) => state.setIsShowModal);
   const setIsError = useItemsStore((state) => state.setIsError);
   const cacheItem = useItemsStore((state) => state.cacheItem);
   const setCacheItem = useItemsStore((state) => state.setCacheItem);
 
+  const isSomeItemChecked = items.some((product) => product.isChecked === true);
+  const isOnlyOneItemChecked =
+    items.reduce(
+      (sum, product) => (product.isChecked === true ? sum + 1 : sum),
+      0
+    ) <= 1;
+
   const handleCreateItem = ({ id, name, price }: ItemType) => {
+    // -- Verifica si el modal esta mostrandose --
     if (isShowModal) {
       if (name && price) {
         // --- Agrega el producto al STATE global de Items ---
         const product = { name, price: Number(price) };
         if (id) {
-          setUpdateItems(cacheItem);
+          updateItems(cacheItem);
         } else {
-          setItems(product);
+          setItems({ ...cacheItem, ...product });
         }
       } else {
         // --- Muestra el mensaje de error ---
@@ -43,6 +54,11 @@ export default function Menu() {
     setIsShowModal();
   };
 
+  const handleEdit = () => {
+    unCheckAllItems(false);
+    setIsShowModal();
+  };
+
   return (
     <>
       {isShowModal ? (
@@ -58,21 +74,44 @@ export default function Menu() {
         </TouchableOpacity>
       ) : (
         // --- NO se muestra el Modal ---
-        <TouchableOpacity
-          onPress={() => handleCreateItem(cacheItem)}
-          style={styles.button}
-        >
-          <FontAwesome name="plus" size={30} color={colorPrimary} />
-          <Text style={styles.text}>Add Item</Text>
-        </TouchableOpacity>
+        !isSomeItemChecked && (
+          // --- Si ningun checkbox de la lista esta activado ---
+          <TouchableOpacity
+            onPress={() => handleCreateItem(cacheItem)}
+            style={styles.button}
+          >
+            <FontAwesome name="plus" size={30} color={colorPrimary} />
+            <Text style={styles.text}>Add Item</Text>
+          </TouchableOpacity>
+        )
       )}
 
-      {items.some((product) => product.isChecked === true) && (
+      {isSomeItemChecked && (
         // --- Si algun checkbox de la lista esta activado ---
-        <TouchableOpacity onPress={setIsShowModal} style={styles.button}>
-          <FontAwesome name="edit" size={30} color={colorPrimary} />
-          <Text style={styles.text}>Edit Item</Text>
-        </TouchableOpacity>
+        <>
+          <TouchableOpacity onPress={sellItems} style={styles.button}>
+            <FontAwesome name="dollar" size={30} color={colorPrimary} />
+            <Text style={styles.text}>{"Sell"}</Text>
+          </TouchableOpacity>
+
+          {
+            // --- Si "solo un checkbox" de la lista esta activado ---
+            isOnlyOneItemChecked && (
+              <TouchableOpacity onPress={handleEdit} style={styles.button}>
+                <FontAwesome name="edit" size={30} color={colorPrimary} />
+                <Text style={styles.text}>Edit</Text>
+              </TouchableOpacity>
+            )
+          }
+
+          <TouchableOpacity
+            onPress={deleteItems}
+            style={[styles.button, { backgroundColor: error }]}
+          >
+            <FontAwesome name="trash" size={30} color={colorPrimary} />
+            <Text style={styles.text}>Delete</Text>
+          </TouchableOpacity>
+        </>
       )}
     </>
   );
@@ -80,6 +119,7 @@ export default function Menu() {
 
 const styles = StyleSheet.create({
   button: {
+    width: 100,
     backgroundColor: primary,
     justifyContent: "center",
     alignItems: "center",
