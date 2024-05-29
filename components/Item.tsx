@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
   },
   textArea: {
     flexShrink: 1,
-    marginLeft: 16,
+    marginLeft: 10,
   },
   text: {
     color: colorSecondary,

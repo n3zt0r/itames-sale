@@ -21,6 +21,9 @@ type ItemsStoreTypes = {
 
   isError: boolean;
   setIsError: (data: boolean) => void;
+
+  filter: string;
+  updateFilter: (data: string) => void;
 };
 
 const createItem = (item: ItemType): ItemType => {
@@ -100,5 +103,10 @@ export const useItemsStore = create<ItemsStoreTypes>((set, get) => ({
   isError: false,
   setIsError: (data) => {
     set(() => ({ isError: data }));
+  },
+
+  filter: "all",
+  updateFilter(data) {
+    set(() => ({ filter: data }));
   },
 }));

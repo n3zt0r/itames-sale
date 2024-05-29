@@ -7,6 +7,15 @@ import Filter from "./Filter";
 
 export default function ItemsList() {
   const items = useItemsStore((state) => state.items);
+  const filter = useItemsStore((state) => state.filter);
+
+  const getFilteredList = () => {
+    if (filter === "all") return items;
+
+    const isSold = filter === "sold" ? true : false;
+
+    return items.filter((item) => item.isSold === isSold);
+  };
 
   return (
     <View style={styles.container}>
@@ -14,7 +23,7 @@ export default function ItemsList() {
         {items.length ? (
           <>
             <Filter />
-            {items.map((product) => (
+            {getFilteredList().map((product) => (
               <Item key={product.id} {...product} />
             ))}
           </>
@@ -41,6 +50,7 @@ const styles = StyleSheet.create({
   },
   content: {
     gap: 10,
+    minHeight: 150,
   },
   text: {
     width: "100%",
