@@ -3,7 +3,7 @@ import Checkbox from "expo-checkbox";
 import { useState } from "react";
 import { useItemsStore } from "@/app/store";
 import { MaterialIcons } from "@expo/vector-icons";
-import { colorPrimary, colorSecondary } from "@/constants/Colors";
+import { colorSecondary } from "@/constants/Colors";
 
 export default function Filter() {
   const unCheckAllItems = useItemsStore((state) => state.unCheckAllItems);
@@ -24,6 +24,7 @@ export default function Filter() {
 
   const handleFilter = (value: string) => {
     updateFilter(value);
+    setIsShowList(!isShowList);
   };
 
   return (
@@ -50,7 +51,7 @@ export default function Filter() {
         </Text>
         <MaterialIcons name="filter-list" size={24} color="rgb(150 150 150)" />
 
-        <View style={[styles.filterList, isShowList && { display: "none" }]}>
+        <View style={[styles.filterList, !isShowList && { display: "none" }]}>
           {/* --- Close Button --- */}
           <Pressable onPress={handleShowList} style={styles.close}>
             <Text>X</Text>

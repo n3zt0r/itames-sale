@@ -50,7 +50,7 @@ export default function Item(product: ItemType) {
       style={[
         styles.container,
         (isChecked || isSold) && {
-          backgroundColor: isSold ? gray : secondaryVariant,
+          backgroundColor: isSold ? "rgb(200 200 200)" : secondaryVariant,
           borderBottomWidth: 0,
         },
       ]}
@@ -59,7 +59,7 @@ export default function Item(product: ItemType) {
       <View>
         <View style={styles.content}>
           <Checkbox
-            style={styles.checkbox}
+            style={[styles.checkbox, isSold && { borderColor: colorSecondary }]}
             value={isChecked}
             onValueChange={handleChecked}
           />
@@ -81,7 +81,9 @@ export default function Item(product: ItemType) {
           >
             <FontAwesome
               style={
-                isSomeItemChecked ? { display: "none" } : { display: "flex" }
+                isSomeItemChecked || isSold
+                  ? { display: "none" }
+                  : { display: "flex" }
               }
               name="edit"
               size={24}
