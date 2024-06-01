@@ -51,12 +51,22 @@ export default function Menu() {
     // --- Reinicia los STATES y cierra el modal ---
     setIsError(false);
     setCacheItem(initialItem);
+    unCheckAllItems(false);
     setIsShowModal();
   };
 
   const handleEdit = () => {
+    const newCacheItem = items.filter((item) => item.isChecked === true)[0];
+    newCacheItem.isEdited = true;
+
+    setCacheItem(newCacheItem);
     unCheckAllItems(false);
     setIsShowModal();
+  };
+
+  const isAllItemsSold = () => {
+    const checkedItems = items.filter((item) => item.isChecked === true);
+    return checkedItems.some((product) => product.isSold === false);
   };
 
   return (
@@ -91,7 +101,9 @@ export default function Menu() {
         <>
           <TouchableOpacity onPress={sellItems} style={styles.button}>
             <FontAwesome name="dollar" size={30} color={colorPrimary} />
-            <Text style={styles.text}>{"Sell"}</Text>
+            <Text style={styles.text}>
+              {isAllItemsSold() ? "Sell" : "Unell"}
+            </Text>
           </TouchableOpacity>
 
           {

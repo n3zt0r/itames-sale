@@ -1,5 +1,4 @@
-import { SafeAreaView, StyleSheet } from "react-native";
-import { StatusBar } from "expo-status-bar";
+import { SafeAreaView, StatusBar, StyleSheet } from "react-native";
 
 import Header from "@/components/Header";
 import ItemsList from "@/components/ItemsList";
@@ -9,11 +8,14 @@ import { primary, primaryVariant } from "@/constants/Colors";
 export default function Index() {
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar style={"light"} backgroundColor={primaryVariant} />
-
       <Header />
       <ItemsList />
 
+      <StatusBar
+        translucent={false}
+        backgroundColor={primaryVariant}
+        barStyle={"light-content"}
+      />
       <ItemModal />
     </SafeAreaView>
   );

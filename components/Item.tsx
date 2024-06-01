@@ -54,7 +54,6 @@ export default function Item(product: ItemType) {
           borderBottomWidth: 0,
         },
       ]}
-      onLongPress={() => handleChecked(true)}
     >
       <View>
         <View style={styles.content}>

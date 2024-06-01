@@ -62,8 +62,6 @@ export const useItemsStore = create<ItemsStoreTypes>()(
         const isAnyItemNotSolded = checkedItems.some(
           (item) => item.isSold === false
         );
-        console.log(checkedItems);
-
         const isSold = isAnyItemNotSolded;
 
         // --- Crea un nuevo arreglo cambiando la propiedad "isChecked" solo ---
