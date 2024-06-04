@@ -33,7 +33,11 @@ export default function ItemModal() {
     <>
       {isShowModal && (
         <>
-          <Pressable style={styles.curtain} onPress={handleClose} />
+          <Pressable
+            style={styles.curtain}
+            onPress={handleClose}
+            accessibilityLabel="close area"
+          />
 
           <View style={[styles.container, styles.borderRadius]}>
             <Text style={styles.title}>
@@ -41,7 +45,7 @@ export default function ItemModal() {
             </Text>
 
             <TouchableOpacity style={styles.closeButton} onPress={handleClose}>
-              <AntDesign name="closecircle" size={30} color={colorPrimary} />
+              <AntDesign name="closecircle" size={48} color={colorPrimary} />
             </TouchableOpacity>
 
             <View style={[styles.form, styles.borderRadius]}>
@@ -78,7 +82,7 @@ export default function ItemModal() {
 const styles = StyleSheet.create({
   curtain: {
     position: "absolute",
-    backgroundColor: "#00000090",
+    backgroundColor: "#00000050",
     top: 0,
     bottom: 0,
     left: 0,
@@ -109,7 +113,7 @@ const styles = StyleSheet.create({
   },
   closeButton: {
     position: "absolute",
-    top: -40,
+    top: -58,
     right: 12,
   },
   text: {

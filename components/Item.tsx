@@ -58,13 +58,18 @@ export default function Item(product: ItemType) {
       <View>
         <View style={styles.content}>
           <Checkbox
+            accessibilityLabel="checkbox"
+            accessibilityLabelledBy="itemID"
             style={[styles.checkbox, isSold && { borderColor: colorSecondary }]}
             value={isChecked}
             onValueChange={handleChecked}
           />
 
           <View style={styles.textArea}>
-            <Text style={[styles.text, isChecked && { color: colorPrimary }]}>
+            <Text
+              nativeID="itemID"
+              style={[styles.text, isChecked && { color: colorPrimary }]}
+            >
               {name}
             </Text>
             <Text style={[styles.price, isChecked && { color: colorPrimary }]}>

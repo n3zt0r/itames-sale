@@ -31,11 +31,13 @@ export default function Filter() {
     <View style={styles.container}>
       <View style={styles.select}>
         <Checkbox
+          accessibilityLabel="checkbox of sellect or unselect all items"
+          accessibilityLabelledBy="select"
           style={styles.checkbox}
           value={isAllChecked}
           onValueChange={handleChecked}
         />
-        <Text style={styles.text}>
+        <Text nativeID="select" style={styles.text}>
           {isAllChecked ? "Unselect" : "Select"} All Items
         </Text>
       </View>

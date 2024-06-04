@@ -22,9 +22,16 @@ export default function ItemsList() {
       {items.length > 0 && <Filter />}
       <ScrollView contentContainerStyle={styles.content}>
         {items.length ? (
-          getFilteredList().map((product) => (
-            <Item key={product.id} {...product} />
-          ))
+          getFilteredList().length ? (
+            getFilteredList().map((product) => (
+              <Item key={product.id} {...product} />
+            ))
+          ) : (
+            <Text style={[styles.text, { fontSize: 22 }]}>
+              There are no items in the list that match {""}
+              <Text style={{ color: primary }}>the filter</Text>
+            </Text>
+          )
         ) : (
           <Text style={styles.text}>
             Start adding items to the list with{" "}
